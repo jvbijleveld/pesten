@@ -1,27 +1,24 @@
 <?php
-namespace Entities\Card;
-
 Class Card{
   
-  private $group;
-  private $value;
+  private $group = "";
+  private $value = "";
   
-  function __contsruct($group, $val){
-    $this->group = $group;
+  function __construct($groupName, $val){
+    $this->group = $groupName;
     $this->value = $val;
   }
     
-  public getGroup(){
+  public function getGroup(){
     return $this->group;
   }
   
   public function getName(){
-    return $this->getGroup() . $this->getValue();
+    return $this->group . $this->value;
   }
   
-  public getValue(){
+  public function getValue(){
     return $this->value;
   }
-  
 }
 ?>

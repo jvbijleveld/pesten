@@ -1,7 +1,6 @@
 <?php
-//namespace controller\Pesten;
-
 require("CardDeck.php");
+require("./entities/Player.php");
 
 Class Pesten{
   
@@ -11,74 +10,80 @@ Class Pesten{
   private $deck;
   private $pile;
   private $currentPlayer;
+  public $gameStart = false;
   
   function __construct(){
-    print "CardDeck::construct<br>";
-    //$cd = new CardDeck();
-    //$cd->getFullDeck();
-    $deck = CardDeck::getFullDeck();
-    print "deck loaded<br>";
+    $this->deck = CardDeck::getFullDeck();
+    $this->pile = array();
+    $this->players = array();
   }
   
   public function setupGame($nofPlayers){
-    $x = 0;
-    
-    while($x < $nofPlayers){
-      $player = new Player("Player ".$x);
-      $this->drawFirstHand($player);
-      $players[] = $player;
+    $x = 1;
+    if(($nofPlayers * self::START_HAND +1) > count($this->deck)){
+    	$this->log("Game could not start: too many players");
+    }
+    $this->log("Setting up an new game");
+    while($x <= $nofPlayers){
+      $player = new Player("Player ".$x, $this);
+      $player->drawFirstHand(self::START_HAND);
+      $this->players[] = $player;
       $x++;
     }
-    
-    $currentPlayer = 0;
-    print_r($deck);
+    $this->currentPlayer = 0;
+    $this->pile[] = $this->drawCard();
   }
   
   public function playGame(){
-    
-    $players[$currentPlayer].playTurn();
-    if($players[$currentPlayer].hasWon()){
-      $this->endGame();
-    }else{
-      $currentPlayer++;
-      
-      if($currentPlayer > count($players)){
-        $currentPlayer = 0;
-      }
+  	$this->gameStart = true;
+  	$r = 1;
+  	$this->log("*********************************************");
+  	$this->log("****          GAME TIME                ******");
+  	$this->log("*********************************************");
+    while($this->gameStart){
+    	$this->players[$this->currentPlayer]->playTurn();
+	    if($this->players[$this->currentPlayer]->hasWon()){
+	      $this->endGame();
+	    }else{
+	      $this->currentPlayer++;
+	      if($this->currentPlayer >= count($this->players)){
+	      	$r++;
+	      	$this->log("** Next Round: ". $r);
+	        $this->currentPlayer = 0;
+	      }
+	    }
     }
   }
   
   private function endGame(){
-    log($players[$currentPlayer].getName . " has won!");
+  	$this->gameStart = false;
+    $this->log($this->players[$this->currentPlayer]->getName() . " has won!");
+    ob_end_flush();
   }
   
-  private function drawFirstHand($player){
-    $x =0;
-    
-    while($x < self::START_HAND){
-      $player->drawCard();
-      $x++
-    }
-  }
-  
-  static public function topPileCard(){
-    return $pile[count($pile)-1];
+  public function topPileCard(){
+    return $this->pile[count($this->pile)-1];
   }
   
   public function playCard($card){
-    $pile[] = $card;
+    $this->pile[] = $card;
   }
   
   public function drawCard(){
-    $returnCard = $deck[count($deck)-1];
-    unset($deck[$returnCard]);
-    return $returnCard;
+  	if(count($this->deck) > 0){
+    	$returnCard = $this->deck[count($this->deck)-1];
+    	unset($this->deck[count($this->deck)-1]);
+    	return $returnCard;
+  	}else{
+  		return null;
+  	}
   }
   
   public function log($line){
-    echo $line;
+  	echo $line . "<br>";
+  	flush();
+  	ob_flush();
+  	usleep(200000);
   }
-  
  }
-
 ?>
