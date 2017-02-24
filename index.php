@@ -1,13 +1,26 @@
 <html>
-  <h1>
-    Pesten
-  </h1>
+  <head>
+    pesten
+  </head>
   
   <body>
+    
     <p>
-      Dit is een spelletje pesten  asd
+      start
     </p>
     
+<?php
+require ("controller/Pesten.php");
+//use controller\Pesten;
+
+$game = new Pesten();
+$game->setupGame(4);
+//$game->startGame();
+    
+?>
+    <P>
+      END
+    </P>
     
   </body>
   
