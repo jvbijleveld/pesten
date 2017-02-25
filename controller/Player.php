@@ -73,20 +73,12 @@ Class Player{
     }
   }
   
-  public function setHand($hand){
-    $this->hand = $hand;
-  }
-  
   public function printHand(){
     $ret = "";
     foreach($this->hand as $card){
       $ret .= $card->getName(). " ";
     }
     return $ret;
-  }
-  
-  public function setName($name){
-    $this->name = $name;
   }
   
   public function getName(){

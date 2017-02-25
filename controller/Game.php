@@ -26,7 +26,7 @@ Class Game{
     	Log::info("Game could not start: too many players");
       return;
     }
-    $this->log("Setting up an new game");
+    Log::info("Setting up an new game");
     foreach($players as $name){
       $player = new Player($name, $this);
       $player->drawFirstHand(self::START_HAND);
