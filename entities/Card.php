@@ -14,7 +14,7 @@ Class Card{
   }
   
   public function getName(){
-    return $this->group . $this->value;
+    return $this->group. $this->value;
   }
   
   public function getValue(){

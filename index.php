@@ -1,10 +1,10 @@
 <?php
 header( 'Content-type: text/html; charset=utf-8' );
 
-require ("controller/Pesten.php");
+require ("./controller/Game.php");
 
-$game = new Pesten();
-$game->setupGame(4); // 4 players
-$game->playGame();
+$pesten = new Game();
+$pesten->setupGame(array("Moe","Apu","Homer","Barney")); // 4 players
+$pesten->playGame();
     
 ?>
